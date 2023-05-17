@@ -2,9 +2,6 @@ const calculator = document.querySelector('.calculator-grid')
 const btns = calculator.querySelectorAll('button')
 const currentOperand = calculator.querySelector('[data-current-operand]')
 const previousOperand = calculator.querySelector('[data-previous-operand]')
-let firstNumber = 0
-let secondNumber = 0
-let operator
 let sign
 
 const operate = (operator, firstNumber, secondNumber) => {
@@ -25,7 +22,6 @@ const operate = (operator, firstNumber, secondNumber) => {
 
 btns.forEach((btn) => {
     btn.addEventListener('click', () => {
-        //console.log(btn)
         const action = btn.dataset.action
         const btnContent = btn.textContent
         const currentDisplay = currentOperand.textContent
@@ -39,7 +35,12 @@ btns.forEach((btn) => {
             calculator.dataset.previousBtnType = 'number'
         }
         if (action === 'decimal') {
-            currentOperand.textContent = currentDisplay + '.'
+            if (previousBtnType === 'operator') {
+                currentOperand.textContent = '0.'
+            } else if (!currentDisplay.includes('.')) {
+                currentOperand.textContent = currentDisplay + '.'
+            }
+            calculator.dataset.previousBtnType = 'decimal'
         }
         if (
             action === 'add' ||
@@ -47,20 +48,41 @@ btns.forEach((btn) => {
             action === 'multiply' ||
             action === 'divide'
           ) {
-            firstNumber = currentDisplay
-            //console.log(firstNumber)
-            previousOperand.textContent = currentDisplay + ' ' + btnContent
-            operator = action
+            const firstNumber = calculator.dataset.firstNumber
+            const operator = calculator.dataset.operator
+            const secondNumber = currentDisplay
+            if (firstNumber && operator && previousBtnType !== 'operator') {
+                const temp = operate(operator, firstNumber, secondNumber)
+                currentOperand.textContent = temp
+                calculator.dataset.firstNumber = temp
+                previousOperand.textContent = `${temp} ${btnContent}`
+            } else {
+                calculator.dataset.firstNumber = currentDisplay
+                previousOperand.textContent = `${currentDisplay} ${btnContent}`
+            }     
+            calculator.dataset.operator = action
             sign = btnContent
             calculator.dataset.previousBtnType = 'operator'
-            //console.log(currentOperator)
         }
-        if (action === 'result') {
-            secondNumber = currentOperand.textContent
-            previousOperand.textContent = `${firstNumber} ${sign} ${secondNumber} =`
-            currentOperand.textContent = operate(operator, firstNumber, secondNumber)
+        resultCond: if (action === 'result') {
+            if (previousBtnType === 'result'){
+                break resultCond
+            }
+            const firstNumber = calculator.dataset.firstNumber
+            const secondNumber = currentDisplay
+            const operator = calculator.dataset.operator
+            if (firstNumber) {
+                previousOperand.textContent = `${firstNumber} ${sign} ${secondNumber} =`
+                const res = operate(operator, firstNumber, secondNumber)
+                calculator.dataset.firstNumber = res
+                calculator.removeAttribute('data-operator')
+                currentOperand.textContent = res
+            }
+            calculator.dataset.previousBtnType = 'result'
         }
         if (action === 'clear'){
+            calculator.removeAttribute('data-operator')
+            calculator.removeAttribute('data-first-number')
             currentOperand.textContent = 0
             previousOperand.textContent = ''
             calculator.dataset.previousBtnType = 'clear'
@@ -76,4 +98,5 @@ btns.forEach((btn) => {
 })
 
 // TODO:
-// edge cases
+// refactoring
+// design
