@@ -6,13 +6,21 @@
 
 body {
     background-color: antiquewhite;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .calculator-grid {
     display: grid;
     justify-content: center;
     align-content: center;
-    min-height: 100vh;
+    background-color: whitesmoke;
+    padding: 1rem;
+    min-height: auto;
+    border-radius: 2%;
     grid-template-columns: repeat(4, 100px);
     grid-template-rows: minmax(120px, auto) repeat(5, 100px);
 }
@@ -21,6 +29,7 @@ body {
         cursor: pointer;
         font-size: 2rem;
         border: 1px solid black;
+        border-radius: 3%;
     }
 
     .calculator-grid > button:hover {
@@ -31,6 +40,14 @@ body {
         grid-column: span 2;
     }
 
+    #clear-btn{
+        background-color: orangered;
+    }
+
+    #del-btn {
+        background-color: slateblue;
+    }
+
     .output-screen{
         background-color: whitesmoke;
         grid-column: 1 / -1;
@@ -39,6 +56,8 @@ body {
         justify-content: space-around;
         align-items: flex-end;
         padding: 10px;
+        border: 1px solid black;
+        border-radius: 3%;
     }
 
     .output-screen > .previous-operand{
@@ -46,5 +65,5 @@ body {
     }
 
     .output-screen > .current-operand{
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
