@@ -7,17 +7,10 @@ let sign
 const operate = (operator, firstNumber, secondNumber) => {
     n1 = parseFloat(firstNumber)
     n2 = parseFloat(secondNumber)
-    let result = 0
-    if (operator === 'add') {
-        result = n1 + n2
-    } else if (operator === 'subtract') {
-        result = n1 - n2
-    } else if (operator === 'multiply') {
-        result = n1 * n2
-    } else if (operator === 'divide') {
-        result = n1 / n2
-    }
-    return result
+    if (operator === 'add') return n1 + n2
+    else if (operator === 'subtract') return n1 - n2
+    else if (operator === 'multiply') return n1 * n2
+    else if (operator === 'divide') return n1 / n2
 }
 
 btns.forEach((btn) => {

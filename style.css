@@ -49,7 +49,7 @@ body {
     }
 
     .output-screen{
-        background-color: whitesmoke;
+        background-color: silver;
         grid-column: 1 / -1;
         display: flex;
         flex-direction: column;
